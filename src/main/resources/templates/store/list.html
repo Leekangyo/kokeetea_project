@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+    </script>
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+
+    <form th:action="@{'/store/list/' + ${stores.number}}" role="form" method="get" th:object="${stores}">
+        <table class="table">
+            <thead>
+            <tr>
+                <td>ID</td>
+                <td>이름</td>
+                <td>위치</td>
+                <td>전화번호</td>
+                <td>이메일</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="store, status: ${stores.getContent()}">
+                <td th:text="${store.id}"></td>
+                <td>
+                    <a th:href="'/store/'+${store.id}" th:text="${store.name}"></a>
+                </td>
+                <td th:text="${store.location}"></td>
+                <td th:text="${store.phone}"></td>
+                <td th:text="${store.email}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:with="start=${(stores.number/maxPage)*maxPage + 1}, end=(${(stores.totalPages == 0) ? 1 : (start + (maxPage - 1) < stores.totalPages ? start + (maxPage - 1) : stores.totalPages)})" >
+            <ul class="pagination justify-content-center">
+
+                <li class="page-OLDItem" th:classappend="${stores.first}?'disabled'">
+                    <a th:action="'/store/list/' + ${stores.number-1}" aria-label='Previous' class="page-link">
+                        <span aria-hidden='true'>Previous</span>
+                    </a>
+                </li>
+
+                <li class="page-OLDItem" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${stores.number eq page-1}?'active':''">
+                    <a th:onclick="'/store/list/' + ${page-1}" th:inline="text" class="page-link">[[${page}]]</a>
+                </li>
+
+                <li class="page-OLDItem" th:classappend="${stores.last}?'disabled'">
+                    <a th:onclick="'/store/list/' + ${stores.number+1}" aria-label='Next' class="page-link">
+                        <span aria-hidden='true'>Next</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </form>
+
+</div>
+
+</html>

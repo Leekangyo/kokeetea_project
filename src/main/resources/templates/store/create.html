@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+    </script>
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+
+    <form role="form" method="post" th:object="${storeFormDTO}">
+
+        <p class="h2">
+            가맹점 등록
+        </p>
+
+        <input type="hidden" th:field="*{id}">
+        
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">이름</span>
+            </div>
+            <input type="text" th:field="*{name}" class="form-control" placeholder="가맹점의 이름을 입력하세요">
+        </div>
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">위치</span>
+            </div>
+            <input type="text" th:field="*{location}" class="form-control" placeholder="가맹점의 위치를 입력하세요">
+        </div>
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">전화번호</span>
+            </div>
+            <input type="text" th:field="*{phone}" class="form-control" placeholder="가맹점의 전화번호를 입력하세요">
+        </div>
+
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text">이메일</span>
+            </div>
+            <input type="email" th:field="*{email}" class="form-control" placeholder="가맹점의 이메일을 입력하세요">
+        </div>
+
+        <div th:if="${#strings.isEmpty(storeFormDTO.id)}" style="text-align: center">
+            <button th:formaction="@{/store/create}" type="submit" class="btn btn-primary">저장</button>
+        </div>
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+    </form>
+
+</div>
+
+</html>

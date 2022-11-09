@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layouts/layout1}">
+
+<!-- 사용자 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <script th:inline="javascript">
+    </script>
+</th:block>
+
+<!-- 사용자 CSS 추가 -->
+<th:block layout:fragment="css">
+    <style>
+    </style>
+</th:block>
+
+<div layout:fragment="content">
+
+    <form role="form" method="get" th:object="${ingredients}">
+        <table class="table">
+            <thead>
+            <tr>
+                <td>ID</td>
+                <td>이름</td>
+                <td>가격</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ingredient, status: ${ingredients.getContent()}">
+                <td th:text="${ingredient.id}"></td>
+                <td>
+                    <a th:text="${ingredient.name}"></a>
+                </td>
+                <td th:text="${ingredient.price}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:with="start=${(ingredients.number/maxPage)*maxPage + 1}, end=(${(ingredients.totalPages == 0) ? 1 : (start + (maxPage - 1) < ingredients.totalPages ? start + (maxPage - 1) : ingredients.totalPages)})" >
+            <ul class="pagination justify-content-center">
+
+                <li class="page-OLDItem" th:classappend="${ingredients.first}?'disabled'">
+                    <a th:action="'/ingredient/list/' + ${ingredients.number-1}" aria-label='Previous' class="page-link">
+                        <span aria-hidden='true'>Previous</span>
+                    </a>
+                </li>
+
+                <li class="page-OLDItem" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${ingredients.number eq page-1}?'active':''">
+                    <a th:onclick="'/ingredient/list/' + ${page-1}" th:inline="text" class="page-link">[[${page}]]</a>
+                </li>
+
+                <li class="page-OLDItem" th:classappend="${ingredients.last}?'disabled'">
+                    <a th:onclick="'/ingredient/list/' + ${ingredients.number+1}" aria-label='Next' class="page-link">
+                        <span aria-hidden='true'>Next</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+        <input th:formaction="@{/ingredient/create}" type="submit" class="btn btn-primary" value="등록">
+    </form>
+
+</div>
+
+</html>
