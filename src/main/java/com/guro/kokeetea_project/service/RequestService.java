@@ -33,7 +33,6 @@ public class RequestService {
     private final RequestRepository requestRepository;
     private final IngredientRepository ingredientRepository;
     private final StoreRepository storeRepository;
-
     private final CurrentStockRepository currentStockRepository;
 
     @Transactional(readOnly = true)
