@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.EntityNotFoundException;
 
+import com.guro.kokeetea_project.entity.CurrentStock;
+import com.guro.kokeetea_project.repository.CurrentStockRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -31,6 +33,8 @@ public class RequestService {
     private final RequestRepository requestRepository;
     private final IngredientRepository ingredientRepository;
     private final StoreRepository storeRepository;
+
+    private final CurrentStockRepository currentStockRepository;
 
     @Transactional(readOnly = true)
     public Page<RequestInfoDTO> list(Pageable pageable){
@@ -65,6 +69,15 @@ public class RequestService {
         request.setAmount(requestFormDTO.getAmount());
         request.setStore(store);
         requestRepository.save(request);
+
+        List<CurrentStock> currentStocks = currentStockRepository.findAll();
+
+        for (CurrentStock currentStock : currentStocks){
+            if (currentStock.getWarehouse().getLocation().equals(store.getLocation())){
+                currentStock.setAmount((currentStock.getAmount())-(requestFormDTO.getAmount()));
+                currentStockRepository.save(currentStock);
+            }
+        }
 
         return request.getId();
     }
