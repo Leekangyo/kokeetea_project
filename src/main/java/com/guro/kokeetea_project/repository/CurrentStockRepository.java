@@ -2,6 +2,7 @@ package com.guro.kokeetea_project.repository;
 
 import com.guro.kokeetea_project.entity.CurrentStock;
 import com.guro.kokeetea_project.entity.Ingredient;
+import com.guro.kokeetea_project.entity.Store;
 import com.guro.kokeetea_project.entity.Warehouse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

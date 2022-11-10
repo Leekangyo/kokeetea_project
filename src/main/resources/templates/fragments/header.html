@@ -22,6 +22,9 @@
                 <li class="nav-OLDItem" sec:authorize="hasAnyAuthority('ROLE_ADMIN')">
                     <a class="nav-link" href="/warehouse/list">창고 관리</a>
                 </li>
+                <li class="nav-OLDItem" sec:authorize="hasAnyAuthority('ROLE_USER')">
+                    <a class="nav-link" href="/request/create">발주 요청</a>
+                </li>
                 <li class="nav-OLDItem" sec:authorize="isAuthenticated()">
                     <a class="nav-link" href="/request/list">발주 내역</a>
                 </li>
