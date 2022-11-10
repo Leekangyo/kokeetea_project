@@ -1,5 +1,6 @@
 package com.guro.kokeetea_project.service;
 
+import com.guro.kokeetea_project.constant.Role;
 import com.guro.kokeetea_project.entity.Member;
 import com.guro.kokeetea_project.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +29,11 @@ public class MemberService implements UserDetailsService {
         if(findMember != null){
             throw new IllegalStateException("이미 가입된 회원입니다.");
         }
+    }
+
+    public Boolean validateAdmin(String email){
+        Member findMember = memberRepository.findByEmail(email);
+        return findMember != null && findMember.getRole() == Role.ADMIN;
     }
 
     @Override

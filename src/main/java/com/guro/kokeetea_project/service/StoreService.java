@@ -45,6 +45,7 @@ public class StoreService {
         store.setLocation(storeFormDTO.getLocation());
         store.setPhone(storeFormDTO.getPhone());
         store.setEmail(storeFormDTO.getEmail());
+        store.setIsValid(true);
         storeRepository.save(store);
 
         return store.getId();

@@ -34,12 +34,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests()
                 .mvcMatchers("/css/**", "/js/**", "/img/**").permitAll()
-                .mvcMatchers("/", "/member/**", "/item/**", "/request/**").permitAll()
+                .mvcMatchers("/", "/member/**", "/error").permitAll()
+                .mvcMatchers("/request/**").hasAnyRole("USER", "ADMIN")
                 .mvcMatchers("/admin/**", "/ingredient/**", "/store/**", "/warehouse/**").hasRole("ADMIN")
                 .anyRequest().authenticated();
 
-        http.exceptionHandling()
-                .authenticationEntryPoint(new CustomAuthenticationEntryPoint());
+        http.exceptionHandling().authenticationEntryPoint(new CustomAuthenticationEntryPoint());
     }
 
     @Bean

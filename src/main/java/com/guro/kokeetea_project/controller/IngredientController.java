@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +28,7 @@ public class IngredientController {
         Page<IngredientInfoDTO> ingredientList = ingredientService.list(pageable);
 
         model.addAttribute("ingredients", ingredientList);
+        model.addAttribute("page", pageable.getPageNumber());
         model.addAttribute("maxPage", 5);
 
         return "ingredient/list";
@@ -50,5 +53,25 @@ public class IngredientController {
             return "ingredient/create";
         }
         return "redirect:/ingredient/list";
+    }
+
+    @PostMapping(value = "/ingredient/delete/{id}")
+    public ResponseEntity<String> deleteIngredientPost(@PathVariable("id") Long id) {
+        try {
+            ingredientService.delete(id);
+        } catch (Exception e) {
+            return new ResponseEntity<>("재료 삭제 중 에러가 발생하였습니다.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(String.valueOf(id), HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/ingredient/delete/{id}/full")
+    public ResponseEntity<String> deleteFullIngredientPost(@PathVariable("id") Long id) {
+        try {
+            ingredientService.deleteFull(id);
+        } catch (Exception e) {
+            return new ResponseEntity<>("재료 삭제 중 에러가 발생하였습니다.", HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(String.valueOf(id), HttpStatus.OK);
     }
 }

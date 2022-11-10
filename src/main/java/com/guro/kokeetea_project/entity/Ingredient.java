@@ -21,4 +21,7 @@ public class Ingredient {
 
     @Column
     private Long price;
+
+    @Column
+    private Boolean isValid;
 }

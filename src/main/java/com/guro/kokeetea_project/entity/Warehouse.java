@@ -40,4 +40,7 @@ public class Warehouse {
             currentStock.setWarehouse(this);
         }
     }
+
+    @Column
+    private Boolean isValid;
 }

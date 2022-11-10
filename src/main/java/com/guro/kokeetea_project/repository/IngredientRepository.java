@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface IngredientRepository extends JpaRepository<Ingredient, Long> {
-    @Query("select i from Ingredient i")
+    @Query("select i from Ingredient i where i.isValid = true")
     List<Ingredient> listIngredient(Pageable pageable);
 
-    @Query("select count(i) from Ingredient i")
+    @Query("select count(i) from Ingredient i where i.isValid = true")
     Long countIngredient();
 }

@@ -46,17 +46,17 @@
         <div th:with="start=${(requests.number/maxPage)*maxPage + 1}, end=(${(requests.totalPages == 0) ? 1 : (start + (maxPage - 1) < requests.totalPages ? start + (maxPage - 1) : requests.totalPages)})" >
             <ul class="pagination justify-content-center">
 
-                <li class="page-OLDItem" th:classappend="${requests.first}?'disabled'">
+                <li class="page-item" th:classappend="${requests.first}?'disabled'">
                     <a th:action="'/request/list/' + ${requests.number-1}" aria-label='Previous' class="page-link">
                         <span aria-hidden='true'>Previous</span>
                     </a>
                 </li>
 
-                <li class="page-OLDItem" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${requests.number eq page-1}?'active':''">
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${requests.number eq page-1}?'active':''">
                     <a th:onclick="'/request/list/' + ${page-1}" th:inline="text" class="page-link">[[${page}]]</a>
                 </li>
 
-                <li class="page-OLDItem" th:classappend="${requests.last}?'disabled'">
+                <li class="page-item" th:classappend="${requests.last}?'disabled'">
                     <a th:onclick="'/request/list/' + ${requests.number+1}" aria-label='Next' class="page-link">
                         <span aria-hidden='true'>Next</span>
                     </a>

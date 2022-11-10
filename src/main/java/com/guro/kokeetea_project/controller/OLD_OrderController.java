@@ -27,7 +27,7 @@ public class OLD_OrderController {
     private final OLD_OrderService OLDOrderService;
 
     @PostMapping(value = "/order")
-    public @ResponseBody ResponseEntity order (@RequestBody @Valid OLD_OrderDto OLDOrderDto, BindingResult bindingResult, Principal principal){
+    public @ResponseBody ResponseEntity<String> order (@RequestBody @Valid OLD_OrderDto OLDOrderDto, BindingResult bindingResult, Principal principal){
 
         if (bindingResult.hasErrors()){
             StringBuilder sb = new StringBuilder();
@@ -35,7 +35,7 @@ public class OLD_OrderController {
             for (FieldError fieldError : fieldErrors){
                 sb.append(fieldError.getDefaultMessage());
             }
-            return new ResponseEntity<String>(sb.toString(), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(sb.toString(), HttpStatus.BAD_REQUEST);
         }
 
         String email = principal.getName();
@@ -47,7 +47,7 @@ public class OLD_OrderController {
             return new ResponseEntity<String>(e.getMessage(),HttpStatus.BAD_REQUEST);
         }
 
-        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+        return new ResponseEntity<>(orderId.toString(), HttpStatus.OK);
     }
 
     @GetMapping(value = {"/orders","/orders/{page}"})
@@ -64,13 +64,13 @@ public class OLD_OrderController {
     }
 
     @PostMapping("/order/{orderId}/cancel")
-    public @ResponseBody ResponseEntity cancelOrder(@PathVariable("orderId") Long orderId, Principal principal){
+    public @ResponseBody ResponseEntity<String> cancelOrder(@PathVariable("orderId") Long orderId, Principal principal){
 
         if (!OLDOrderService.validateOrder(orderId, principal.getName())){
-            return new ResponseEntity<String>("주문 취소 권한이 없습니다.",HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>("주문 취소 권한이 없습니다.",HttpStatus.FORBIDDEN);
         }
 
         OLDOrderService.cancelOrder(orderId);
-        return new ResponseEntity<Long>(orderId, HttpStatus.OK);
+        return new ResponseEntity<>(orderId.toString(), HttpStatus.OK);
     }
 }

@@ -44,17 +44,17 @@
         <div th:with="start=${(stores.number/maxPage)*maxPage + 1}, end=(${(stores.totalPages == 0) ? 1 : (start + (maxPage - 1) < stores.totalPages ? start + (maxPage - 1) : stores.totalPages)})" >
             <ul class="pagination justify-content-center">
 
-                <li class="page-OLDItem" th:classappend="${stores.first}?'disabled'">
+                <li class="page-item" th:classappend="${stores.first}?'disabled'">
                     <a th:action="'/store/list/' + ${stores.number-1}" aria-label='Previous' class="page-link">
                         <span aria-hidden='true'>Previous</span>
                     </a>
                 </li>
 
-                <li class="page-OLDItem" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${stores.number eq page-1}?'active':''">
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}" th:classappend="${stores.number eq page-1}?'active':''">
                     <a th:onclick="'/store/list/' + ${page-1}" th:inline="text" class="page-link">[[${page}]]</a>
                 </li>
 
-                <li class="page-OLDItem" th:classappend="${stores.last}?'disabled'">
+                <li class="page-item" th:classappend="${stores.last}?'disabled'">
                     <a th:onclick="'/store/list/' + ${stores.number+1}" aria-label='Next' class="page-link">
                         <span aria-hidden='true'>Next</span>
                     </a>

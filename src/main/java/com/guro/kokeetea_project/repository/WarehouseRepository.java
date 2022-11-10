@@ -9,9 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 public interface WarehouseRepository extends JpaRepository<Warehouse, Long> {
-    @Query("select w from Warehouse w")
+    @Query("select w from Warehouse w where w.isValid = true")
     List<Warehouse> listWarehouse(Pageable pageable);
 
-    @Query("select count(w) from Warehouse w")
+    @Query("select count(w) from Warehouse w where w.isValid = true")
     Long countWarehouse();
 }

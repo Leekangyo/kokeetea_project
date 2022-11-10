@@ -28,4 +28,7 @@ public class Store {
     @Column
     private String email;
 
+    @Column
+    private Boolean isValid;
+
 }

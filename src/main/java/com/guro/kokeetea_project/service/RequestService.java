@@ -21,7 +21,6 @@ import com.guro.kokeetea_project.entity.Store;
 import com.guro.kokeetea_project.repository.IngredientRepository;
 import com.guro.kokeetea_project.repository.RequestRepository;
 import com.guro.kokeetea_project.repository.StoreRepository;
-import com.guro.kokeetea_project.repository.WarehouseRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,7 +31,6 @@ public class RequestService {
     private final RequestRepository requestRepository;
     private final IngredientRepository ingredientRepository;
     private final StoreRepository storeRepository;
-    private final WarehouseRepository warehouseRepository;
 
     @Transactional(readOnly = true)
     public Page<RequestInfoDTO> list(Pageable pageable){

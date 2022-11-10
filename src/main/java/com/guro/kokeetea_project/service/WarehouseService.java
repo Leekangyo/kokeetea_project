@@ -34,7 +34,7 @@ public class WarehouseService {
             warehouseInfoDTO.setId(warehouse.getId());
             warehouseInfoDTO.setName(warehouse.getName());
 
-            List<CurrentStock> currentStocks = currentStockRepository.findByWarehouse(warehouse);
+            List<CurrentStock> currentStocks = currentStockRepository.listValidCurrentStock(warehouse);
             List<CurrentStockInfoDTO> currentStockInfoDTOList = new ArrayList<>();
 
             for(CurrentStock currentStock : currentStocks) {
@@ -64,16 +64,19 @@ public class WarehouseService {
         Ingredient i1 = new Ingredient();
         i1.setName("초콜릿");
         i1.setPrice(1400L);
+        i1.setIsValid(true);
         ingredientRepository.save(i1);
 
         Ingredient i2 = new Ingredient();
         i2.setName("우유");
         i2.setPrice(1200L);
+        i2.setIsValid(true);
         ingredientRepository.save(i2);
 
         Ingredient i3 = new Ingredient();
         i3.setName("커피 원두");
         i3.setPrice(900L);
+        i3.setIsValid(true);
         ingredientRepository.save(i3);
 
         Store s1 = new Store();
@@ -81,6 +84,7 @@ public class WarehouseService {
         s1.setLocation("뉴욕");
         s1.setPhone("01022223333");
         s1.setEmail("honey@gmail.com");
+        s1.setIsValid(true);
         storeRepository.save(s1);
 
         Store s2 = new Store();
@@ -88,6 +92,7 @@ public class WarehouseService {
         s2.setLocation("시카고");
         s2.setPhone("01023457111");
         s2.setEmail("jaja123@gmail.com");
+        s2.setIsValid(true);
         storeRepository.save(s2);
 
         Request r1 = new Request();
@@ -113,6 +118,7 @@ public class WarehouseService {
         w1.setLocation("뉴욕");
         w1.setPhone("01023234545");
         w1.setEmail("griffin123@gmail.com");
+        w1.setIsValid(true);
         warehouseRepository.save(w1);
 
         CurrentStock cs1 = new CurrentStock();
@@ -132,6 +138,7 @@ public class WarehouseService {
         w2.setLocation("뉴욕");
         w2.setPhone("01023885555");
         w2.setEmail("haha@gmail.com");
+        w2.setIsValid(true);
         warehouseRepository.save(w2);
 
         CurrentStock cs3 = new CurrentStock();
