@@ -28,7 +28,7 @@ public class WarehouseController {
 
     @GetMapping(value = {"/warehouse/list","/warehouse/list/{page}"})
     public String listWarehouse(@PathVariable("page") Optional<Integer> page, Model model){
-        Pageable pageable = PageRequest.of(page.orElse(0), 10);
+        Pageable pageable = PageRequest.of(page.orElse(1)-1, 10);
         Page<WarehouseInfoDTO> warehouseList = warehouseService.list(pageable);
 
         model.addAttribute("warehouses", warehouseList);
@@ -39,7 +39,7 @@ public class WarehouseController {
 
     @PostMapping(value = {"/warehouse/list/refresh","/warehouse/list/refresh/{page}"})
     public String refreshWarehouse(@PathVariable("page") Optional<Integer> page, Model model){
-        Pageable pageable = PageRequest.of(page.orElse(0), 10);
+        Pageable pageable = PageRequest.of(page.orElse(1)-1, 10);
         Page<WarehouseInfoDTO> warehouseList = warehouseService.list(pageable);
         model.addAttribute("warehouses", warehouseList);
         model.addAttribute("maxPage", 5);
