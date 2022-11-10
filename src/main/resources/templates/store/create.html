@@ -6,6 +6,12 @@
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        $(document).ready(function(){
+            var errorMessage = [[${errorMessage}]];
+            if(errorMessage != null){
+                alert(errorMessage);
+            }
+        });
     </script>
 </th:block>
 
@@ -31,6 +37,7 @@
             </div>
             <input type="text" th:field="*{name}" class="form-control" placeholder="가맹점의 이름을 입력하세요">
         </div>
+        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="fieldError">Incorrect data</p>
 
         <div class="input-group">
             <div class="input-group-prepend">
@@ -38,6 +45,7 @@
             </div>
             <input type="text" th:field="*{location}" class="form-control" placeholder="가맹점의 위치를 입력하세요">
         </div>
+        <p th:if="${#fields.hasErrors('location')}" th:errors="*{location}" class="fieldError">Incorrect data</p>
 
         <div class="input-group">
             <div class="input-group-prepend">
@@ -45,6 +53,7 @@
             </div>
             <input type="text" th:field="*{phone}" class="form-control" placeholder="가맹점의 전화번호를 입력하세요">
         </div>
+        <p th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}" class="fieldError">Incorrect data</p>
 
         <div class="input-group">
             <div class="input-group-prepend">
@@ -52,6 +61,7 @@
             </div>
             <input type="email" th:field="*{email}" class="form-control" placeholder="가맹점의 이메일을 입력하세요">
         </div>
+        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="fieldError">Incorrect data</p>
 
         <div th:if="${#strings.isEmpty(storeFormDTO.id)}" style="text-align: center">
             <button th:formaction="@{/store/create}" type="submit" class="btn btn-primary">저장</button>

@@ -6,6 +6,50 @@
 <!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
     <script th:inline="javascript">
+        function deleteStore(full, Store) {
+            var yes = confirm("정말 삭제하겠습니까?\n\n재료 이름: "+Store.name)
+            if (!yes) {
+                return false;
+            }
+            var token = $("meta[name='_csrf']").attr("content");
+            var header = $("meta[name='_csrf_header']").attr("content");
+
+            var url = "/store/delete/" + Store.id;
+            if (full) {
+                url += "/full"
+            }
+            var paramData = {
+                id : Store.id,
+            };
+
+            var param = JSON.stringify(paramData);
+
+            $.ajax({
+                url : url,
+                type : "POST",
+                contentType : "application/json",
+                data : param,
+                beforeSend : function (xhr){
+                    xhr.setRequestHeader(header, token);
+                },
+                dataType : "json",
+                cache : false,
+                success : function (result, status){
+                    alert("가맹점를 삭제했습니다.");
+                    location.href='/store/list/' + [[${page}]];
+                },
+                error : function (jqXHR, status, error){
+                    if (jqXHR.status === '401'){
+                        alert('로그인 후 이용해주세요.');
+                        location.href='/members/login';
+                    }else {
+                        alert(jqXHR.responseText);
+                    }
+                }
+            });
+
+            return true;
+        }
     </script>
 </th:block>
 
@@ -17,7 +61,7 @@
 
 <div layout:fragment="content">
 
-    <form th:action="@{'/store/list/' + ${stores.number}}" role="form" method="get" th:object="${stores}">
+    <form role="form" method="get" th:object="${stores}">
         <table class="table">
             <thead>
             <tr>
@@ -26,6 +70,7 @@
                 <td>위치</td>
                 <td>전화번호</td>
                 <td>이메일</td>
+                <td></td>
             </tr>
             </thead>
             <tbody>
@@ -37,6 +82,10 @@
                 <td th:text="${store.location}"></td>
                 <td th:text="${store.phone}"></td>
                 <td th:text="${store.email}"></td>
+                <td>
+                    <input type="button" class="btn btn-primary" value="삭제" th:onclick="deleteStore(false, [[${store}]])">
+                    <input type="button" class="btn btn-primary" value="완전삭제" th:onclick="deleteStore(true, [[${store}]])">
+                </td>
             </tr>
             </tbody>
         </table>
@@ -62,6 +111,7 @@
 
             </ul>
         </div>
+        <input th:formaction="@{/store/create}" type="submit" class="btn btn-primary" value="등록">
     </form>
 
 </div>
