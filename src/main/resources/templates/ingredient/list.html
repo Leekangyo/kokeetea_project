@@ -40,16 +40,12 @@
                 dataType : "json",
                 cache : false,
                 success : function (result, status){
-                    alert("재료를 삭제했습니다.");
+                    alert("재료를 삭제하였습니다.");
                     location.href='/ingredient/list/' + [[${page}]];
                 },
                 error : function (jqXHR, status, error){
-                    if (jqXHR.status === '401'){
-                        alert('권한이 없습니다.');
-                        location.href='redirect:/';
-                    }else {
-                        alert(jqXHR.responseText);
-                    }
+                    alert(jqXHR.responseText);
+                    location.href='/ingredient/list/' + [[${page}]];
                 }
             });
 
