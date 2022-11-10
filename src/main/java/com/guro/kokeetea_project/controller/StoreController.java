@@ -20,7 +20,7 @@ public class StoreController {
 
     @GetMapping(value = {"/store/list","/store/list/{page}"})
     public String listStore(@PathVariable("page") Optional<Integer> page, Model model){
-        Pageable pageable = PageRequest.of(page.orElse(0), 10);
+        Pageable pageable = PageRequest.of(page.orElse(1)-1, 10);
         Page<StoreInfoDTO> storeList = storeService.list(pageable);
 
         model.addAttribute("stores", storeList);

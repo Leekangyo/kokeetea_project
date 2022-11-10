@@ -25,7 +25,7 @@ public class IngredientService {
     private final RequestRepository requestRepository;
 
     @Transactional(readOnly = true)
-    public Page<IngredientInfoDTO> list(Pageable pageable) {
+    public Page<IngredientInfoDTO> list(Pageable pageable) throws Exception {
         List<Ingredient> ingredients = ingredientRepository.listIngredient(pageable);
         Long totalCount = ingredientRepository.countIngredient();
         List<IngredientInfoDTO> list = new ArrayList<>();
@@ -41,11 +41,37 @@ public class IngredientService {
         return new PageImpl<>(list, pageable, totalCount);
     }
 
+    @Transactional(readOnly = true)
+    public IngredientFormDTO original(Long id) throws Exception {
+        Ingredient ingredient = ingredientRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        if (!ingredient.getIsValid()) {
+            throw new EntityNotFoundException();
+        }
+        IngredientFormDTO dto = new IngredientFormDTO();
+        dto.setId(ingredient.getId());
+        dto.setName(ingredient.getName());
+        dto.setPrice(ingredient.getPrice());
+
+        return dto;
+    }
+
     public Long create(IngredientFormDTO ingredientFormDTO) throws Exception {
         Ingredient ingredient = new Ingredient();
         ingredient.setName(ingredientFormDTO.getName());
         ingredient.setPrice(ingredientFormDTO.getPrice());
         ingredient.setIsValid(true);
+        ingredientRepository.save(ingredient);
+
+        return ingredient.getId();
+    }
+
+    public Long update(IngredientFormDTO ingredientFormDTO) throws Exception {
+        Ingredient ingredient = ingredientRepository.findById(ingredientFormDTO.getId()).orElseThrow(EntityNotFoundException::new);
+        if (!ingredient.getIsValid()) {
+            throw new EntityNotFoundException();
+        }
+        ingredient.setName(ingredientFormDTO.getName());
+        ingredient.setPrice(ingredientFormDTO.getPrice());
         ingredientRepository.save(ingredient);
 
         return ingredient.getId();

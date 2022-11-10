@@ -24,7 +24,7 @@ public class RequestController {
 
     @GetMapping(value = {"/request/list","/request/list/{page}"})
     public String listRequest(@PathVariable("page") Optional<Integer> page, Model model){
-        Pageable pageable = PageRequest.of(page.orElse(0), 10);
+        Pageable pageable = PageRequest.of(page.orElse(1)-1, 10);
         Page<RequestInfoDTO> requestList = requestService.list(pageable);
 
         model.addAttribute("requests", requestList);

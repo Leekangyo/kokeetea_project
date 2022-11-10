@@ -45,8 +45,8 @@
                 },
                 error : function (jqXHR, status, error){
                     if (jqXHR.status === '401'){
-                        alert('로그인 후 이용해주세요.');
-                        location.href='/members/login';
+                        alert('권한이 없습니다.');
+                        location.href='redirect:/';
                     }else {
                         alert(jqXHR.responseText);
                     }
@@ -85,7 +85,7 @@
                 <td th:text="${ingredient.price}"></td>
                 <td>
                     <input type="button" class="btn btn-primary" value="삭제" th:onclick="deleteIngredient(false, [[${ingredient}]])">
-                    <input type="button" class="btn btn-primary" value="완전삭제" th:onclick="deleteIngredient(true, [[${ingredient}]])">
+                    <input type="button" class="btn btn-primary" value="수정" th:onclick="location.href='/ingredient/update/'+[[${ingredient.id}]]">
                 </td>
             </tr>
             </tbody>

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -24,13 +25,16 @@ public class IngredientController {
 
     @GetMapping(value = {"/ingredient/list","/ingredient/list/{page}"})
     public String listIngredient(@PathVariable("page") Optional<Integer> page, Model model){
-        Pageable pageable = PageRequest.of(page.orElse(0), 10);
-        Page<IngredientInfoDTO> ingredientList = ingredientService.list(pageable);
-
-        model.addAttribute("ingredients", ingredientList);
-        model.addAttribute("page", pageable.getPageNumber());
-        model.addAttribute("maxPage", 5);
-
+        try {
+            Pageable pageable = PageRequest.of(page.orElse(1)-1, 10);
+            Page<IngredientInfoDTO> ingredientList = ingredientService.list(pageable);
+            model.addAttribute("ingredients", ingredientList);
+            model.addAttribute("page", pageable.getPageNumber());
+            model.addAttribute("maxPage", 5);
+        } catch (Exception e) {
+            model.addAttribute("errorMessage", "목록 표시 중 에러가 발생하였습니다.");
+            return "main";
+        }
         return "ingredient/list";
     }
 
@@ -41,7 +45,7 @@ public class IngredientController {
     }
 
     @PostMapping(value = "/ingredient/create")
-    public String createIngredientPost(@Valid IngredientFormDTO ingredientFormDTO, BindingResult bindingResult, Model model){
+    public String createIngredientPost(@Valid IngredientFormDTO ingredientFormDTO, BindingResult bindingResult, RedirectAttributes flash){
         if (bindingResult.hasErrors()){
             return "ingredient/create";
         }
@@ -49,14 +53,39 @@ public class IngredientController {
         try {
             ingredientService.create(ingredientFormDTO);
         } catch (Exception e){
-            model.addAttribute("errorMessage", "재료 등록 중 에러가 발생하였습니다.");
+            flash.addFlashAttribute("errorMessage", "재료 등록 중 에러가 발생하였습니다.");
+        }
+        return "redirect:/ingredient/list";
+    }
+
+    @GetMapping(value = "/ingredient/update/{id}")
+    public String updateIngredient(@PathVariable("id") Long id, Model model, RedirectAttributes flash){
+        try {
+            IngredientFormDTO ingredientFormDTO = ingredientService.original(id);
+            model.addAttribute("ingredientFormDTO", ingredientFormDTO);
             return "ingredient/create";
+        } catch (Exception e) {
+            flash.addAttribute("errorMessage", "양식 표시 중 에러가 발생하였습니다.");
+            return "redirect:/ingredient/list";
+        }
+    }
+
+    @PostMapping(value = "/ingredient/update")
+    public String updateIngredientPost(@Valid IngredientFormDTO ingredientFormDTO, BindingResult bindingResult, RedirectAttributes flash){
+        if (bindingResult.hasErrors()){
+            return "ingredient/create";
+        }
+
+        try {
+            ingredientService.update(ingredientFormDTO);
+        } catch (Exception e){
+            flash.addFlashAttribute("errorMessage", "재료 수정 중 에러가 발생하였습니다.");
         }
         return "redirect:/ingredient/list";
     }
 
     @PostMapping(value = "/ingredient/delete/{id}")
-    public ResponseEntity<String> deleteIngredientPost(@PathVariable("id") Long id) {
+    public @ResponseBody ResponseEntity<String> deleteIngredientPost(@PathVariable("id") Long id) {
         try {
             ingredientService.delete(id);
         } catch (Exception e) {
@@ -66,7 +95,7 @@ public class IngredientController {
     }
 
     @PostMapping(value = "/ingredient/delete/{id}/full")
-    public ResponseEntity<String> deleteFullIngredientPost(@PathVariable("id") Long id) {
+    public @ResponseBody ResponseEntity<String> deleteFullIngredientPost(@PathVariable("id") Long id) {
         try {
             ingredientService.deleteFull(id);
         } catch (Exception e) {

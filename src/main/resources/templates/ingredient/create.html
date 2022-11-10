@@ -3,23 +3,10 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layouts/layout1}">
 
-<!-- 사용자 스크립트 추가 -->
 <th:block layout:fragment="script">
-    <script th:inline="javascript">
-        $(document).ready(function(){
-            var errorMessage = [[${errorMessage}]];
-            if(errorMessage != null){
-                alert(errorMessage);
-            }
-        });
-    </script>
 </th:block>
 
-<!-- 사용자 CSS 추가 -->
 <th:block layout:fragment="css">
-    <style>
-
-    </style>
 </th:block>
 
 <div layout:fragment="content">
@@ -48,9 +35,9 @@
         </div>
         <p th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="fieldError">Incorrect data</p>
 
-        <div th:if="${#strings.isEmpty(ingredientFormDTO.id)}" style="text-align: center">
-            <button th:formaction="@{/ingredient/create}" type="submit" class="btn btn-primary">저장</button>
-        </div>
+        <button th:if="${#strings.isEmpty(ingredientFormDTO.id)}" th:formaction="@{/ingredient/create}" type="submit" class="btn btn-primary">등록</button>
+        <button th:unless="${#strings.isEmpty(ingredientFormDTO.id)}" th:formaction="@{/ingredient/update}" type="submit" class="btn btn-primary">수정</button>
+        <button th:onclick="location.href='/ingredient/list'" type="button" class="btn btn-primary">취소</button>
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
     </form>
 
