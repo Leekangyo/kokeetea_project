@@ -53,7 +53,7 @@ public class IngredientController {
         try {
             ingredientService.create(ingredientFormDTO);
         } catch (Exception e){
-            flash.addFlashAttribute("errorMessage", "재료 수정 중 에러가 발생하였습니다.");
+            flash.addFlashAttribute("errorMessage", "재료 등록 중 에러가 발생하였습니다.");
         }
         return "redirect:/ingredient/list";
     }
