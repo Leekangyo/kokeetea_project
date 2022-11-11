@@ -33,7 +33,6 @@ public class RequestService {
     private final RequestRepository requestRepository;
     private final IngredientRepository ingredientRepository;
     private final StoreRepository storeRepository;
-
     private final CurrentStockRepository currentStockRepository;
 
     @Transactional(readOnly = true)
@@ -74,8 +73,10 @@ public class RequestService {
 
         for (CurrentStock currentStock : currentStocks){
             if (currentStock.getWarehouse().getLocation().equals(store.getLocation())){
-                currentStock.setAmount((currentStock.getAmount())-(requestFormDTO.getAmount()));
-                currentStockRepository.save(currentStock);
+                if(currentStock.getIngredient()==ingredient) {
+                    currentStock.setAmount((currentStock.getAmount()) - (requestFormDTO.getAmount()));
+                    currentStockRepository.save(currentStock);
+                }
             }
         }
 

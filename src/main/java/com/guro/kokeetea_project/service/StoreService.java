@@ -2,7 +2,10 @@ package com.guro.kokeetea_project.service;
 
 import com.guro.kokeetea_project.dto.StoreFormDTO;
 import com.guro.kokeetea_project.dto.StoreInfoDTO;
+import com.guro.kokeetea_project.entity.Ingredient;
 import com.guro.kokeetea_project.entity.Store;
+import com.guro.kokeetea_project.repository.CurrentStockRepository;
+import com.guro.kokeetea_project.repository.RequestRepository;
 import com.guro.kokeetea_project.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -11,6 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +23,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class StoreService {
     private final StoreRepository storeRepository;
+
+    private final CurrentStockRepository currentStockRepository;
+
+    private final RequestRepository requestRepository;
 
     @Transactional(readOnly = true)
     public Page<StoreInfoDTO> list(Pageable pageable){
@@ -49,5 +57,16 @@ public class StoreService {
         storeRepository.save(store);
 
         return store.getId();
+    }
+
+    public void deleteFull(Long id) throws Exception {
+        Store store = storeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        requestRepository.deleteByStore(store);
+        storeRepository.deleteById(id);
+    }
+
+    public void delete(Long id) throws Exception {
+        Store store = storeRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        store.setIsValid(false);
     }
 }
