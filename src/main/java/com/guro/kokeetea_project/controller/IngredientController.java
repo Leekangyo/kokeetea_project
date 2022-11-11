@@ -24,16 +24,16 @@ public class IngredientController {
     private final IngredientService ingredientService;
 
     @GetMapping(value = {"/ingredient/list","/ingredient/list/{page}"})
-    public String listIngredient(@PathVariable("page") Optional<Integer> page, Model model){
+    public String listIngredient(@PathVariable("page") Optional<Integer> page, Model model, RedirectAttributes flash){
         try {
             Pageable pageable = PageRequest.of(page.orElse(1)-1, 10);
             Page<IngredientInfoDTO> ingredientList = ingredientService.list(pageable);
             model.addAttribute("ingredients", ingredientList);
-            model.addAttribute("page", pageable.getPageNumber());
+            model.addAttribute("page", pageable.getPageNumber()+1);
             model.addAttribute("maxPage", 5);
         } catch (Exception e) {
-            model.addAttribute("errorMessage", "목록 표시 중 에러가 발생하였습니다.");
-            return "main";
+            flash.addFlashAttribute("errorMessage", "목록 표시 중 에러가 발생하였습니다.");
+            return "redirect:/";
         }
         return "ingredient/list";
     }
@@ -65,7 +65,7 @@ public class IngredientController {
             model.addAttribute("ingredientFormDTO", ingredientFormDTO);
             return "ingredient/create";
         } catch (Exception e) {
-            flash.addAttribute("errorMessage", "양식 표시 중 에러가 발생하였습니다.");
+            flash.addFlashAttribute("errorMessage", "양식 표시 중 에러가 발생하였습니다.");
             return "redirect:/ingredient/list";
         }
     }
