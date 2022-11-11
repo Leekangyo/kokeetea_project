@@ -29,6 +29,7 @@ public class StoreController {
 
         model.addAttribute("stores", storeList);
         model.addAttribute("maxPage", 5);
+        model.addAttribute("page", pageable.getPageNumber()+1);
 
         return "store/list";
     }
@@ -55,7 +56,7 @@ public class StoreController {
     }
 
     @PostMapping(value = "/store/delete/{id}")
-    public ResponseEntity<String> deleteStorePost(@PathVariable("id") Long id) {
+    public @ResponseBody ResponseEntity<String> deleteStorePost(@PathVariable("id") Long id) {
         try {
             storeService.delete(id);
         } catch (Exception e) {
@@ -65,7 +66,7 @@ public class StoreController {
     }
 
     @PostMapping(value = "/store/delete/{id}/full")
-    public ResponseEntity<String> deleteFullStorePost(@PathVariable("id") Long id) {
+    public @ResponseBody ResponseEntity<String> deleteFullStorePost(@PathVariable("id") Long id) {
         try {
             storeService.deleteFull(id);
         } catch (Exception e) {
