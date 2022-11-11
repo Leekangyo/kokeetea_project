@@ -73,8 +73,10 @@ public class RequestService {
 
         for (CurrentStock currentStock : currentStocks){
             if (currentStock.getWarehouse().getLocation().equals(store.getLocation())){
-                currentStock.setAmount((currentStock.getAmount())-(requestFormDTO.getAmount()));
-                currentStockRepository.save(currentStock);
+                if(currentStock.getIngredient()==ingredient) {
+                    currentStock.setAmount((currentStock.getAmount()) - (requestFormDTO.getAmount()));
+                    currentStockRepository.save(currentStock);
+                }
             }
         }
 
